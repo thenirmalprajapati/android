@@ -1,0 +1,375 @@
+strings.xml
+
+<resources>
+    <string name="app_name">Program1</string>
+    <string name="name">Nirmal</string>
+    <string name="enrollment">ET22MTCA104</string>
+</resources>
+
+
+android:text="@string/enrollment"/>
+
+android:text="Have a GOOD Day"
+android:textColor="#4CAF50"
+android:textColorHint="#4CAF50"
+android:textSize="24sp"
+android:layout_marginTop="40dp"
+android:layout_marginLeft="120dp"
+android:layout_width="162dp"
+
+
+val btn=findViewById<Button>(R.id.btnSubmit)
+btn.setOnClickListener {
+   val name=text.text.toString()
+            Toast.makeText(applicationContext,name, Toast.LENGTH_LONG).show()
+  }
+        val username = findViewById<EditText>(R.id.username);
+        val password = findViewById<EditText>(R.id.password);
+        val btn = findViewById<Button>(R.id.btn)
+
+        btn.setOnClickListener {
+            val uname = "admin"
+            val pass = "admin123"
+
+            var str1 = username.text.toString()
+            var str2 = password.text.toString()
+            if(uname.toString().equals(str1) && pass.toString().equals(str2))
+            {
+                Toast.makeText(applicationContext,"Login Successfully!",Toast.LENGTH_LONG).show()
+                val i = Intent(applicationContext,Redirect::class.java)
+                i.putExtra("uname",uname)
+                startActivity(i)
+            }
+            else
+            {
+                Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+==============================================
+
+Redirect.kt
+
+class Redirect : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.redirect)
+        val textView=findViewById<TextView>(R.id.textView6);
+        val newvalue = intent.getStringExtra("uname");
+
+        textView.text = "Welcome $newvalue";
+
+    }
+}
+============================================
+ViewBinding
+
+
+ buildFeatures{
+        viewBinding = true
+    }
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        var binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnSubmit.setOnClickListener {
+            Toast.makeText(this, binding.txtName.text.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+===========================================
+
+RegistrationForm
+
+
+        var g :String? = null
+        var Date: String? = null
+        var name = findViewById<EditText>(R.id.txtUsername)
+        var address = findViewById<EditText>(R.id.txtAddress)
+        var DOB = findViewById<CalendarView>(R.id.calendarView)
+        var gender = findViewById<RadioGroup>(R.id.rdGroup)
+        var hobbies1 = findViewById<CheckBox>(R.id.chkDance)
+        var hobbies2 = findViewById<CheckBox>(R.id.chkTravel)
+        var btnRegister = findViewById<Button>(R.id.btnSubmit)
+
+        gender.setOnCheckedChangeListener { group, checkedId ->
+            g = if (R.id.rdbMale == checkedId) "Male" else "Female"
+        }
+
+        DOB.setOnDateChangeListener(CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
+            Date = (dayOfMonth.toString() + "-" + (month + 1) + "-" + year)
+        })
+
+        fun getHobbies(hobbies1:CheckBox,hobbies2:CheckBox):String{
+            var hobby = ""
+            if (hobbies1.isChecked){
+                hobby += hobbies1.text.toString()
+            }
+            if (hobbies2.isChecked){
+                hobby += ","+hobbies2.text.toString()
+            }
+            return hobby
+        }
+        btnRegister.setOnClickListener {
+
+            var intent = Intent(this,Redirect::class.java)
+            intent.putExtra("name",name.text.toString())
+            intent.putExtra("address",address.text.toString())
+            intent.putExtra("DOB",Date)
+            intent.putExtra("gender",g)
+            intent.putExtra("hobby",getHobbies(hobbies1,hobbies2))
+            startActivity(intent)
+        }
+=========================================
+
+class Redirect : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_redirect)
+
+        var user = findViewById<TextView>(R.id.txtmyUsername)
+        var address = findViewById<TextView>(R.id.txtmyAddress)
+        var DOB = findViewById<TextView>(R.id.txtmyDOB)
+        var gender = findViewById<TextView>(R.id.txtmyGender)
+        var hobby = findViewById<TextView>(R.id.mychkDance)
+        user.setText(intent.getStringExtra("name")).toString()
+        address.setText(intent.getStringExtra("address")).toString()
+        DOB.setText(intent.getStringExtra("DOB")).toString()
+        gender.setText(intent.getStringExtra("gender")).toString()
+        hobby.setText(intent.getStringExtra("hobby")).toString()
+    }
+}
+
+=========================================
+
+spinner
+
+<resources>
+    <string name="app_name">Program10</string>
+    <string-array name="Font">
+        <item>Apple</item>
+        <item>Mango</item>
+        <item>Banana</item>
+    </string-array>
+</resources>
+
+ <Spinner
+    android:id="@+id/spinner"
+    android:layout_width="143dp"
+    android:layout_height="34dp"
+    android:entries="@array/Font" />
+
+
+	val sp1 = findViewById<Spinner>(R.id.spinner)
+        val sp2 = findViewById<Spinner>(R.id.spinner2)
+        val txt = findViewById<TextView>(R.id.textView3)
+        val FontName = arrayOf("Apple", "Mango", "Bannna")
+        val adp = ArrayAdapter(this, android.R.layout.simple_list_item_1, FontName)
+
+        sp1.adapter = adp;
+        val FontSize = arrayOf("16", "20", "24")
+        val adp1 = ArrayAdapter(this, android.R.layout.simple_list_item_1, FontSize)
+        sp2.adapter = adp1;
+        sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                txt.text = FontName[p2].toString()
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+        sp2.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val selectedSize = sp2.selectedItem.toString()
+                val textSize = selectedSize.removeSuffix("sp").toFloat()
+                txt.textSize = textSize
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+
+
+=====================================================
+
+package com.example.program16
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setTitle("Action Bar")
+        actionBar?.setSubtitle("Select Item")
+        actionBar?.setIcon(R.drawable.ic_launcher_foreground)
+        actionBar?.setDisplayUseLogoEnabled(true)
+        actionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.search_item -> {
+                Toast.makeText(this, "CLick on Search", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.upload_item->{
+                Toast.makeText(this, "Click on Upload", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.copy_item->{
+                Toast.makeText(this, "Click on Copy", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.print_item->{
+                Toast.makeText(this, "Click on Print", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.share_item->{
+                Toast.makeText(this, "Click on Share", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+}
+
+==========================================================
+
+17. Write an application to demonstrate drawable, gradient and custom animation in android.
+
+Drawable
+
+animation_list.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/f1"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f2"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f3"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f4"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f5"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f6"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f7"
+        android:duration="210"/>
+    <item android:drawable="@drawable/f8"
+        android:duration="210"/>
+</animation-list>
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</RelativeLayout>
+ 
+MainActivity.kt
+
+package com.example.frame_animation
+
+import android.graphics.drawable.AnimationDrawable
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.frame_animation.databinding.ActivityMainBinding
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        var binding : ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        var img = binding.img
+
+        img.setBackgroundResource(R.drawable.animation_list)
+
+        var frameAnimation : AnimationDrawable = (img.background as AnimationDrawable)
+        frameAnimation.start()
+    }
+}
+
+Output:
+
+ 	 	 
+
+ 
+Gradient
+
+gradient_drawable.xml
+
+<?xml version = "1.0" encoding = "utf-8" ?>
+<shape
+    android:shape = "rectangle"
+    xmlns:android = "http://schemas.android.com/apk/res/android" >
+
+    <gradient
+        android:startColor = "#F40303"
+        android:centerColor = "#055798"
+        android:endColor = "#00FF0C"
+        android:angle = "90"
+        android:type = "linear" />
+</shape>
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background = "@drawable/gradient_drawable"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"/>
+
+MainActivity.kt
+
+package com.example.program17
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+ 
+Output:
+
+ 
+
+
+
